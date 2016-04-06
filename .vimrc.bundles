@@ -1,0 +1,193 @@
+" vundele 插件管理
+set nocompatible              " be iMproved
+filetype off                  " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+Bundle 'L9'
+
+" ================= 文档搜索
+Bundle 'kien/ctrlp.vim'
+
+" ================= 自动补全
+Bundle 'Valloric/YouCompleteMe'
+"重启 :YcmRestartServer
+"youcompleteme  默认tab  s-tab 和自动补全冲突
+let g:ycm_key_list_select_completion= ['<tab>']
+let g:ycm_key_list_previous_completion= ['<s-tab>']
+"在注释输入中也能补全
+let g:ycm_complete_in_comments= 1
+"提示UltiSnips
+let g:ycm_use_ultisnips_completer= 1
+"注释和字符串中的文字也会被收入补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
+"语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+let g:ycm_seed_identifiers_with_syntax=1
+
+" 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+" old version
+if !empty(glob("~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
+    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+endif
+" new version
+if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+endif
+
+" 直接触发自动补全 insert模式下
+let g:ycm_key_invoke_completion = '<C-Space>'
+" 黑名单,不启用
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar' : 1,
+      \ 'gitcommit' : 1,
+      \}
+
+
+" 代码片段快速插入 (snippets中,是代码片段资源,需要学习)
+Bundle 'honza/vim-snippets'
+Bundle 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsSnippetDirectories  = ['UltiSnips']
+let g:UltiSnipsSnippetsDir = '~/.vim/UltiSnips'
+
+" ================== 括号补全
+Bundle 'Raimondi/delimitMate'
+
+" ================== 括号高亮
+Bundle 'kien/rainbow_parentheses.vim'
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+
+" 不加入这行, 防止黑色括号出现, 很难识别
+" " \ ['black',       'SeaGreen3'],
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+" ================== 成对括号跳转
+Bundle 'vim-scripts/matchit.zip'
+
+" ================== 符号环绕
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+Bundle 'docunext/closetag.vim'
+let g:closetag_html_style=1
+
+ "================== 批量注释
+Bundle 'scrooloose/nerdcommenter'
+"<leader>c **
+let g:NERDSpaceDelims=1
+
+" ================== 格式化
+Bundle 'junegunn/vim-easy-align'
+vmap <Leader>a <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+if !exists('g:easy_align_delimiters')
+      let g:easy_align_delimiters = {}
+  endif
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
+
+" ================== 快速跳转
+Bundle 'Lokaltog/vim-easymotion'
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+map <Leader><leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><leader>l <Plug>(easymotion-lineforward)
+" 重复上一次操作, 类似repeat插件, 很强大
+map <Leader><leader>. <Plug>(easymotion-repeat)
+
+" ================== 标记跳转
+Bundle "kshenoy/vim-signature"
+" m [a-zA-Z] 打标签
+" ' [a-zA-Z] 跳转到标签
+" m<space>
+
+" ================== 主题
+Bundle 'altercation/vim-colors-solarized'
+let g:solarized_termtrans=0
+let g:solarized_contrast="normal"
+let g:solarized_visibility="normal"
+set background=dark
+" set background=light
+set t_Co=256
+colorscheme solarized
+syntax enable
+syntax on
+
+" ================== 状态菜单
+Bundle 'bling/vim-airline'
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '▶'
+let g:airline_left_alt_sep = '❯'
+let g:airline_right_sep = '◀'
+let g:airline_right_alt_sep = '❮'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+" 是否打开tabline
+let g:airline#extensions#tabline#enabled = 1
+
+" ================== tagbar
+" brew install ctags
+Bundle 'majutsushi/tagbar'
+nmap <F9> :TagbarToggle<CR>
+" 启动时自动focus
+let g:tagbar_autofocus = 1
+
+" ================== taglist
+Bundle 'vim-scripts/taglist.vim'
+
+" ================== nerdtree
+Bundle 'scrooloose/nerdtree'
+map <F3> :NERDTreeMirror<CR>
+map <F3> :NERDTreeToggle<CR>
+
+" ================= v 选择
+Bundle 'terryma/vim-expand-region'
+vmap K <Plug>(expand_region_expand)
+vmap J <Plug>(expand_region_shrink)
+
+" ================== for last space
+Bundle 'bronson/vim-trailing-whitespace'
+map <leader><space> :FixWhitespace<cr>
+
+" ================== ement
+Bundle 'mattn/emmet-vim'
+
+" ================== 多语言语法检查
+Bundle 'scrooloose/syntastic'
+let g:syntastic_error_symbol='>>'
+let g:syntastic_warning_symbol='>'
+let g:syntastic_check_on_open=1
+let g:syntastic_check_on_wq=0
+let g:syntastic_enable_highlighting=1
+"
+" 最轻量
+let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes"
+
+Bundle 'Shutnik/jshint2.vim'
+
